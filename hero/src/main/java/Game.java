@@ -11,21 +11,20 @@ import java.io.IOException;
 public class Game {
 
     private Screen screen;
-    private int x =10;
-    private int y =10;
+    Hero hero = new Hero(10,10);
 
     public Game() throws IOException {
-            Terminal terminal = new DefaultTerminalFactory().createTerminal();
-            screen = new TerminalScreen(terminal);
+        Terminal terminal = new DefaultTerminalFactory().createTerminal();
+        screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);   // we don't need a cursor
         screen.startScreen();             // screens must be started
         screen.doResizeIfNecessary();     // resize screen if necessary
     }
 
     private void draw() throws IOException {
-            screen.clear();
-            screen.setCharacter(x, y, new TextCharacter('X'));
-            screen.refresh();
+        screen.clear();
+        hero.draw(screen);
+        screen.refresh();
     }
 
     public void run () throws IOException {
@@ -33,42 +32,38 @@ public class Game {
         KeyStroke key;
 
         do {
-
             draw();
             key = screen.readInput();
+
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
                 screen.close();
             }
+
             if (key.getKeyType() == KeyType.EOF){
                 break;
             }
+
             processKey(key);
-        } while ( true);
+
+        } while (true);
     }
 
     private void processKey(KeyStroke key) {
-        System.out.println(key);
+        //System.out.println(key);
 
         switch (key.getKeyType()) {
             case ArrowUp:
-            {
-                y--;
+                hero.moveUp();
                 break;
-            }
             case ArrowLeft:
-            {   x--;
+                hero.moveLeft();
                 break;
-            }
             case ArrowDown:
-            {
-                y++;
+                hero.moveDown();
                 break;
-            }
             case ArrowRight:
-            {
-                x++;
+                hero.moveRight();
                 break;
-            }
         }
     }
 }
