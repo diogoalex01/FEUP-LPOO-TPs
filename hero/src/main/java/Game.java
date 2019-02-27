@@ -11,8 +11,7 @@ import java.io.IOException;
 public class Game {
 
     private Screen screen;
-    Position position = new Position(10, 10);
-    Hero hero = new Hero(position);
+    Arena arena = new Arena(15,15);
 
     public Game() throws IOException {
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
@@ -24,7 +23,7 @@ public class Game {
 
     private void draw() throws IOException {
         screen.clear();
-        hero.draw(screen);
+        arena.draw(screen);
         screen.refresh();
     }
 
@@ -49,26 +48,8 @@ public class Game {
         } while (true);
     }
 
-    private void moveHero(Position position) {
-        hero.setPosition(position);
-    }
-
     private void processKey(KeyStroke key) {
         //System.out.println(key);
-
-        switch (key.getKeyType()) {
-            case ArrowUp:
-                moveHero(hero.moveUp());
-                break;
-            case ArrowLeft:
-                moveHero(hero.moveLeft());
-                break;
-            case ArrowDown:
-                moveHero(hero.moveDown());
-                break;
-            case ArrowRight:
-                moveHero(hero.moveRight());
-                break;
-        }
+        arena.processKey(key);
     }
 }
