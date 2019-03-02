@@ -39,10 +39,21 @@ public class Arena {
         return height;
     }
 
+    private boolean heroEntersWall(Position position) {
+        for (Wall wall : walls) {
+            if (wall.getPosition().equals(position))
+                return true;
+        }
+
+        return false;
+    }
+
     private boolean canHeroMove(Position position) {
-        if (position.getX() < width-1 && position.getX() >= 1 &&
-                position.getY() < height-1 && position.getY() >= 1)
+        if (position.getX() < width && position.getX() >= 0 &&
+                position.getY() < height && position.getY() >= 0 &&
+                !heroEntersWall(position)) {
             return true;
+        }
 
         return false;
     }
