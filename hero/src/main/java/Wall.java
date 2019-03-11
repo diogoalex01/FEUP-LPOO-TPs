@@ -3,25 +3,22 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
-public class Wall {
+public class Wall extends Element {
 
-    private int x;
-    private int y;
+    public Wall(int x, int y) {
 
-    public Wall(int width, int height) {
-        this.x = width;
-        this.y = height;
+        super(x,y);
     }
 
     public void draw(TextGraphics graphics) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF10"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(x, y), "$");
+        graphics.putString(new TerminalPosition(super.getPosition().getX(), super.getPosition().getY()), "$");
     }
 
     public Position getPosition() {
 
-        Position p = new Position(x, y);
+        Position p = new Position(super.getPosition().getX(), super.getPosition().getY());
 
         return p;
     }
