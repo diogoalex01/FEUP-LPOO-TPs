@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Game {
 
     private Screen screen;
-    Arena arena = new Arena(15,15);
+    Arena arena = new Arena(40,20);
 
 
     public Game() throws IOException {

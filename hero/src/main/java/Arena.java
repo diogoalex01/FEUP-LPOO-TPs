@@ -45,6 +45,16 @@ public class Arena {
         return height;
     }
 
+    public boolean gameOver()
+    {
+        for(Monster monster : monsters) {
+            if (hero.getPosition().equals(monster.getPosition())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean heroEntersWall(Position position) {
         for (Wall wall : walls) {
             if (wall.getPosition().equals(position))
@@ -70,7 +80,10 @@ public class Arena {
     {
         for (Coin coin : coins) {
             if (coin.getX() == hero.getPosition().getX() && coin.getY() == hero.getPosition().getY())
-                coins.remove(this);
+            { coins.remove(coin);
+                break;
+            }
+
         }
     }
 
@@ -85,9 +98,8 @@ public class Arena {
     }
 
     private boolean canMonsterMove(Position position) {
-        if (position.getX() < width && position.getX() >= 0 &&
-                position.getY() < height && position.getY() >= 0 &&
-                !MonsterEntersWall(position)) {
+        if (position.getX() < width - 1 && position.getX() >= 0 &&
+                position.getY() < height - 1 && position.getY() >= 0 && !MonsterEntersWall(position)) {
             return true;
         }
 
@@ -96,25 +108,31 @@ public class Arena {
 
 
     public void moveHero(Position position) {
-        if (canHeroMove(position))
+        if (canHeroMove(position)) {
             hero.setPosition(position);
-    }
-
-    public void moveMonster(Position position) {
-        if (canMonsterMove(position))
-        {
-            for( Monster monster : monsters)
+            retrieveCoins();
+            if(gameOver())
             {
-                monster.setMonsterPosition(position);
+                System.out.println("Game Over");
             }
         }
+    }
+
+    public void moveMonster() {
+
+            for( Monster monster : monsters)
+            {
+                if (canMonsterMove(monster.move()))
+                {
+                    monster.setMonsterPosition(position);
+                }
+            }
 
     }
 
     public void processKey(KeyStroke key) {
 
-        for( Monster monster : monsters)
-        moveMonster(monster.move());
+        moveMonster();
 
         switch (key.getKeyType()) {
             case ArrowUp:
@@ -141,7 +159,7 @@ public class Arena {
             wall.draw(graphics);
 
         for(Coin coin: coins){
-                retrieveCoins();
+
                 coin.draw(graphics);
             }
 
@@ -182,7 +200,7 @@ public class Arena {
     {
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        for(int i = 0; i<2;i++)
+        for(int i = 0; i<15;i++)
         {
             monsters.add(new Monster(random.nextInt(width -2) + 1, random.nextInt(height-2) +1));
         }
